@@ -1,0 +1,32 @@
+step 0: train loss 4.3134, val loss 4.3112
+         train ppl  74.6961, val ppl  74.5324
+
+step 500: train loss 1.8635, val loss 1.9629
+         train ppl  6.4462, val ppl  7.1200
+
+step 1000: train loss 1.5663, val loss 1.7459
+         train ppl  4.7889, val ppl  5.7313
+
+step 1500: train loss 1.4433, val loss 1.6481
+         train ppl  4.2347, val ppl  5.1973
+
+step 2000: train loss 1.3749, val loss 1.6112
+         train ppl  3.9547, val ppl  5.0086
+
+step 2500: train loss 1.3202, val loss 1.5712
+         train ppl  3.7442, val ppl  4.8125
+
+step 3000: train loss 1.2760, val loss 1.5406
+         train ppl  3.5824, val ppl  4.6674
+
+step 3500: train loss 1.2483, val loss 1.5403
+         train ppl  3.4844, val ppl  4.6661
+
+step 4000: train loss 1.2222, val loss 1.5369
+         train ppl  3.3947, val ppl  4.6502
+
+step 4500: train loss 1.1967, val loss 1.5267
+         train ppl  3.3092, val ppl  4.6030
+
+step 4999: train loss 1.1776, val loss 1.5246
+         train ppl  3.2465, val ppl  4.5931

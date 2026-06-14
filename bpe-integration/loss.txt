@@ -1,0 +1,44 @@
+step 0: train loss 10.9969, val loss 10.9987
+         train ppl  59690.8450, val ppl  59799.2728
+
+Checkpoint saved → gpt_checkpoint.pth
+step 50: train loss 7.0254, val loss 7.0456
+         train ppl  1124.8172, val ppl  1147.7567
+step 100: train loss 5.8410, val loss 5.9892
+         train ppl  344.1145, val ppl  399.0827
+step 150: train loss 5.2418, val loss 5.5853
+         train ppl  189.0162, val ppl  266.4671
+step 200: train loss 4.8695, val loss 5.2726
+         train ppl  130.2587, val ppl  194.9142
+step 250: train loss 4.6810, val loss 5.1780
+         train ppl  107.8740, val ppl  177.3196
+step 300: train loss 4.5309, val loss 5.0533
+         train ppl  92.8392, val ppl  156.5352
+step 350: train loss 4.4047, val loss 5.0211
+         train ppl  81.8306, val ppl  151.5782
+step 400: train loss 4.2873, val loss 4.9848
+         train ppl  72.7691, val ppl  146.1775
+step 450: train loss 4.2325, val loss 4.9352
+         train ppl  68.8919, val ppl  139.0951
+step 500: train loss 4.1133, val loss 4.9154
+         train ppl  61.1464, val ppl  136.3750
+
+Checkpoint saved → gpt_checkpoint.pth
+step 550: train loss 4.0270, val loss 4.8405
+         train ppl  56.0949, val ppl  126.5385
+step 600: train loss 3.9493, val loss 4.8027
+         train ppl  51.9003, val ppl  121.8412
+step 650: train loss 3.8531, val loss 4.8017
+         train ppl  47.1390, val ppl  121.7205
+step 700: train loss 3.8179, val loss 4.7407
+         train ppl  45.5067, val ppl  114.5115
+step 750: train loss 3.7444, val loss 4.7656
+         train ppl  42.2822, val ppl  117.4060
+step 800: train loss 3.6663, val loss 4.7585
+         train ppl  39.1059, val ppl  116.5655
+step 850: train loss 3.5776, val loss 4.7307
+         train ppl  35.7889, val ppl  113.3737
+step 900: train loss 3.5432, val loss 4.7233
+         train ppl  34.5771, val ppl  112.5368
+step 950: train loss 3.4947, val loss 4.7531
+         train ppl  32.9396, val ppl  115.9405

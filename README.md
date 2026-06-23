@@ -4,7 +4,7 @@ An autoregressive language model built entirely from scratch in PyTorch. While t
 
 The model is trained on the TinyShakespeare dataset and features a modularized, production-style training and inference pipeline designed to run efficiently within a 4GB VRAM constraint (NVIDIA RTX 3050).
 
-## 🧠 Architecture Highlights
+## Architecture Highlights
 
 Unlike standard educational implementations that use vanilla Multi-Head Attention, this model uses Grouped Query Attention calculated purely via matrix multiplication (no `F.scaled_dot_product` shortcuts). During autoregressive generation, a custom KV-Cache handles sequence history to optimize memory usage and token generation speed.
 
@@ -85,5 +85,7 @@ To generate text using the pretrained weights, point the inference script to the
 python scripts/infer.py --checkpoint results/gpt_checkpoint.pth --temperature 0.8 --tokens 200 --top_k 10
 ```
 
-## 🗺️ Next Steps
-* **Mechanistic Interpretability:** Implementing Activation Patching and Logit Lenses on scaled-down subsets of this architecture to reverse-engineer information flow and discover specific circuit diagrams.
+## Extensions
+
+* **[Mechanistic Interpretability](https://github.com/LightY-01/mechanistic-interpretability/):** Implemented Activation Patching and Logit Lenses on a custom 2-layer transformer trained on modular addition, to reverse-engineer information flow and discover specific circuit diagrams.
+* **[LLM Inference Engine — KV-Cache & Speculative Decoding](https://github.com/LightY-01/llm-inference-engine):** Built a highly optimized transformer inference engine from this GPT codebase. Key features include a KV-cache using pre-allocated tensor buffers to prevent recomputing past states, continuous batching to handle concurrent requests with variable-length sequences, and speculative decoding using a faster 2-layer draft model with rejection sampling. Benchmarked against HuggingFace's `generate()` as a baseline.

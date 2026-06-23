@@ -1,7 +1,7 @@
 import torch
+import torch.nn.functional as F
 from data import Tokenizer, create_batches
 from model import GPT
-from train import train_step, get_lr
 import math
 import matplotlib.pyplot as plt
 from generate import generate_text
@@ -19,6 +19,39 @@ max_iters      = 5000
 device         = 'cuda' if torch.cuda.is_available() else 'cpu'
 eval_iters     = 50
 CHECKPOINT     = 'gpt_checkpoint.pth'
+
+def get_lr(step: int, max_steps: int, learning_rate: float, warmup_steps: int):
+    """Cosine learning rate schedule with warmup"""
+    if step < warmup_steps:
+        return learning_rate * (step / warmup_steps)
+    decay_ratio = (step - warmup_steps) / (max_steps - warmup_steps)
+    coeff = 0.5 * (1.0 + math.cos(math.pi * decay_ratio))
+    return learning_rate * 0.1 + learning_rate * 0.9 * coeff
+
+def train_step(model: torch.nn.Module, X: torch.Tensor, Y: torch.Tensor, optimizer: torch.optim.Optimizer, scaler: torch.cuda.amp.GradScaler, max_norm: float = 1.0) -> float:
+    """A single training step, correctly handling both CPU and CUDA."""
+    device_type = X.device.type
+    use_amp = device_type == 'cuda'
+
+    optimizer.zero_grad(set_to_none=True)
+    
+    with torch.amp.autocast(device_type=device_type, enabled=use_amp):
+        logits = model(X)
+        loss = F.cross_entropy(logits.view(-1, logits.size(-1)), Y.view(-1))
+    
+    if use_amp and scaler is not None:
+        scaler.scale(loss).backward()
+        scaler.unscale_(optimizer)
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm)
+        scaler.step(optimizer)
+        scaler.update()
+    else:
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm)
+        optimizer.step()
+    
+    return loss.item()
+
 
 @torch.no_grad()
 def estimate_loss(model: GPT, train_data: torch.Tensor, val_data: torch.Tensor, batch_size: int, context_length: int, device: str) -> Dict[str, float]:
@@ -112,20 +145,6 @@ def main():
             }, CHECKPOINT)
             print(f"\nCheckpoint saved → {CHECKPOINT}")
     print("\n--- Training Complete! Generating sample text ---")
-
-    # Quick Testing
-    test_prompt = "To be, or not to be, that is the question:"
-    print(f"Prompt: {test_prompt}\n")
-    output = generate_text(
-        model=model,
-        prompt=test_prompt,
-        tokenizer=tokenizer,
-        max_new_tokens=150,
-        context_length=context_length,
-        temperature=0.8,
-        device=device,
-    )
-    print("Generated:\n", output)
 
 if __name__ == "__main__":
     main()

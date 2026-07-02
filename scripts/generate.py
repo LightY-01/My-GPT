@@ -26,8 +26,7 @@ def generate_text(
     x = torch.tensor(context, dtype=torch.long, device=device).unsqueeze(0) # Shape: (1, seq_len)
 
     # 2. Initialize KV Caches (One dedicated cache tracker per Transformer layer)
-    # If your GPT model has N layers, we pass a list of N KVCache objects
-    num_layers = len(model.blocks) if hasattr(model, 'blocks') else 2 # Defaulting to your spec
+    num_layers = len(model.blocks) if hasattr(model, 'blocks') else 2 
     # Pass context_length to KVCache so it can manage its size
     kv_caches = [KVCache(context_length=context_length) for _ in range(num_layers)]
     

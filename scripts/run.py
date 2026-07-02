@@ -13,6 +13,7 @@ context_length = 256
 embed_dim      = 512
 num_heads      = 12
 num_kv_heads   = 6
+num_blocks     = 4
 learning_rate  = 3e-4
 warmup_steps   = 100
 max_iters      = 5000
@@ -100,7 +101,7 @@ def main():
     train_data = full_data[:n]
     val_data   = full_data[n:]
 
-    model     = GPT(vocab_size, embed_dim, num_heads, num_kv_heads, context_length).to(device)
+    model     = GPT(vocab_size, embed_dim, num_heads, num_kv_heads, context_length, num_blocks).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=0.1)
     scaler    = torch.amp.GradScaler() if device == 'cuda' else None
 
@@ -118,7 +119,7 @@ def main():
 
         loss = train_step(model, x_batch, y_batch, optimizer, scaler)
 
-        if iter % 500 == 0 or iter == max_iters - 1:
+        if iter % 50 == 0 or iter == max_iters - 1:
             losses    = estimate_loss(model, train_data, val_data, batch_size, context_length, device)
             train_ppl = math.exp(losses['train'])
             val_ppl   = math.exp(losses['val'])
@@ -128,23 +129,25 @@ def main():
             train_ppl_history.append(train_ppl)
             val_ppl_history.append(val_ppl)
             plot_curves(tracked_steps, train_ppl_history, val_ppl_history)
+        if iter % 500 == 0 or iter == max_iters - 1:
             # CHECKPOINT SAVING
             # Save everything infer.py needs: weights, vocab, and the exact
-            # hyperparameters used, so the architecture can be reconstructed exactly
+            # hyperparameters used, so the architecture can be reconstructed exactly.
             torch.save({
                 'model_state_dict': model.state_dict(),
-                'vocab': vocab,
+                # 'vocab': vocab,
                 'hyperparams': {
                     'vocab_size':     vocab_size,
                     'embed_dim':      embed_dim,
                     'num_heads':      num_heads,
                     'num_kv_heads':   num_kv_heads,
                     'context_length': context_length,
-                    'num_blocks':     4,
+                    'num_blocks':     num_blocks,
                 }
             }, CHECKPOINT)
             print(f"\nCheckpoint saved → {CHECKPOINT}")
-    print("\n--- Training Complete! Generating sample text ---")
+        
+    print("\nTraining Complete!")
 
 if __name__ == "__main__":
     main()
